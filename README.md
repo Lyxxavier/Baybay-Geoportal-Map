@@ -8,7 +8,6 @@ An interactive web map showing coastal reclamation projects around Manila Bay. A
 
 - Review two Pasay examples using PRA-published details and direct source links; the project list is not yet a complete Manila Bay inventory.
 - Filter by **Planned**, **Ongoing**, or **Completed**; search by project name, status, or proponent.
-- The picker shows up to six matching projects at a time. Search across the full list to find projects beyond the first six; the map and totals reflect all matches.
 - See the total PRA-reported area and count of verified PRA boundaries; illustrative placeholder areas are excluded from the total.
 
 ## Site tabs
