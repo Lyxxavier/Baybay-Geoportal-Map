@@ -2,6 +2,7 @@
   "use strict";
 
   var DATA_URL = "data/reclamation-projects.geojson";
+  var MAX_VISIBLE_PROJECTS = 6;
   var CENTER = [14.56, 120.95]; // Manila Bay
   var COLORS = { Planned: "#4d78a8", Ongoing: "#d38a00", Completed: "#2e7d5b" };
 
@@ -141,16 +142,20 @@
   }
 
   function render() {
-    var shown = visible();
+    var matches = visible();
+    var listed = matches.slice(0, MAX_VISIBLE_PROJECTS);
     layerGroup.clearLayers();
     listEl.innerHTML = "";
 
-    shown.forEach(function (f) {
+    matches.forEach(function (f) {
+      var layer = layersById[f._id];
+      if (layer) layerGroup.addLayer(layer);
+    });
+
+    listed.forEach(function (f) {
       var id = f._id;
       var li = document.createElement("li");
       var p = f.properties || {};
-      var layer = layersById[id];
-      if (layer) layerGroup.addLayer(layer);
 
       if (f.geometry) {
         var btn = document.createElement("button");
@@ -168,17 +173,20 @@
         record.style.setProperty("--c", COLORS[p.status] || "");
         record.innerHTML = '<h2 class="name">' + esc(p.name) + "</h2>" +
           '<p class="meta">' + esc(p.status) + " · " + esc(p.area_ha) + " ha project area</p>" +
+          '<details class="record-details"><summary>Project details and source</summary>' +
           (p.agency ? '<p class="record-detail"><strong>Proponents:</strong> ' + esc(p.agency) + "</p>" : "") +
           (p.milestone ? '<p class="record-detail">' + esc(p.milestone) + "</p>" : "") +
-          (p.source_url ? '<a class="record-source" href="' + esc(p.source_url) + '" target="_blank" rel="noopener noreferrer">Read PRA source<span class="sr-only"> (opens in a new tab)</span></a>' : "");
+          (p.source_url ? '<a class="record-source" href="' + esc(p.source_url) + '" target="_blank" rel="noopener noreferrer">Read PRA source<span class="sr-only"> (opens in a new tab)</span></a>' : "") +
+          "</details>";
         li.appendChild(record);
       }
       listEl.appendChild(li);
     });
 
-    emptyEl.hidden = shown.length > 0;
-    resultSummaryEl.textContent = "Showing " + shown.length + " of " + features.length + " projects";
-    updateStats(shown);
+    emptyEl.hidden = matches.length > 0;
+    resultSummaryEl.textContent = "Showing " + listed.length + " of " + matches.length +
+      " matching projects" + (matches.length > MAX_VISIBLE_PROJECTS ? " — search to find others." : ".");
+    updateStats(matches);
   }
 
   function focusProject(id, btn) {
@@ -217,7 +225,7 @@
         layer.on("click", function () {
           var btns = listEl.querySelectorAll("button");
           var pos = visible().indexOf(f);
-          focusProject(f._id, btns[pos]);
+          focusProject(f._id, pos < MAX_VISIBLE_PROJECTS ? btns[pos] : null);
         });
         layersById[i] = layer;
       }
