@@ -17,16 +17,16 @@
 
   <header class="site-header">
     <a class="brand" href="#top">Baybay Geoportal</a>
-    <nav aria-label="Main" class="tab-nav">
-      <button class="tab-button active" type="button" data-tab="projects">Projects</button>
-      <button class="tab-button" type="button" data-tab="reporting">Report Violations</button>
-      <button class="tab-button" type="button" data-tab="advocacy">Advocacy</button>
-      <button class="tab-button" type="button" data-tab="assessment">Assessments &amp; Findings</button>
+    <nav aria-label="Main" class="tab-nav" role="tablist">
+      <button class="tab-button active" type="button" id="tab-projects" role="tab" aria-selected="true" aria-controls="projects" data-tab="projects">Projects</button>
+      <button class="tab-button" type="button" id="tab-reporting" role="tab" aria-selected="false" aria-controls="reporting" data-tab="reporting" tabindex="-1">Report Violations</button>
+      <button class="tab-button" type="button" id="tab-advocacy" role="tab" aria-selected="false" aria-controls="advocacy" data-tab="advocacy" tabindex="-1">Advocacy</button>
+      <button class="tab-button" type="button" id="tab-assessment" role="tab" aria-selected="false" aria-controls="assessment" data-tab="assessment" tabindex="-1">Assessments &amp; Findings</button>
     </nav>
   </header>
 
   <main id="top">
-    <section class="tab-panel active portal" id="projects" aria-label="Reclamation projects">
+    <section class="tab-panel active portal" id="projects" role="tabpanel" aria-labelledby="tab-projects" tabindex="0" aria-label="Reclamation projects">
       <aside class="panel">
         <h1>Reclamation projects around Manila Bay</h1>
         <p class="lead">See where land is being, or has been, reclaimed from the sea. Pick a project to zoom to it.</p>
@@ -44,8 +44,16 @@
           <label class="chip" data-status="Completed"><input type="checkbox" value="Completed" checked><span>Completed</span></label>
         </fieldset>
 
+        <div class="project-tools">
+          <label class="search-field" for="project-search">
+            <span class="sr-only">Search projects by name, status, or agency</span>
+            <input id="project-search" type="search" placeholder="Search projects" autocomplete="off">
+          </label>
+          <button class="reset-button" id="reset-filters" type="button">Reset</button>
+        </div>
+        <p class="result-summary" id="result-summary" aria-live="polite"></p>
         <ul class="project-list" id="project-list"></ul>
-        <p class="empty" id="empty" hidden>No projects match these filters. Turn on a status above to see projects.</p>
+        <p class="empty" id="empty" hidden>No projects match your search and status filters. Clear the search or reset the filters to see projects.</p>
       </aside>
 
       <div class="map-wrap">
@@ -54,7 +62,7 @@
       </div>
     </section>
 
-    <section class="tab-panel report-panel" id="reporting" aria-label="Report violations">
+    <section class="tab-panel report-panel" id="reporting" role="tabpanel" aria-labelledby="tab-reporting" tabindex="0" aria-label="Report violations">
       <div class="content-shell">
         <div class="section-intro">
           <p class="eyebrow">Citizen reporting</p>
@@ -64,6 +72,10 @@
 
         <div class="report-grid">
           <form class="report-form" id="reportForm">
+            <div class="form-prototype-note" role="note">
+              <strong>Prototype notice</strong>
+              <p>This page does not send or save reports. Use the preview to organize details, then submit through an official CHR channel. Avoid entering sensitive personal information here.</p>
+            </div>
             <div class="field-row two-up">
               <label>
                 <span>Reporter name</span>
@@ -94,7 +106,7 @@
 
             <label>
               <span>What happened?</span>
-              <textarea name="details" rows="6" placeholder="Describe the incident, dates, affected community members, and any observed impacts."></textarea>
+              <textarea name="details" rows="6" placeholder="Describe the incident, dates, affected community members, and any observed impacts." required></textarea>
             </label>
 
             <label>
@@ -103,9 +115,10 @@
             </label>
 
             <div class="actions">
-              <button type="submit" class="primary-button">Submit report</button>
-              <p class="form-note">This portal is for documentation and referral. Reports may be directed to the CHR complaint process and local authorities for action.</p>
+              <button type="submit" class="primary-button">Preview report</button>
+              <p class="form-note">Nothing is transmitted or stored by this page.</p>
             </div>
+            <div class="report-preview" id="reportPreview" hidden aria-live="polite"></div>
           </form>
 
           <aside class="info-card">
@@ -124,7 +137,7 @@
       </div>
     </section>
 
-    <section class="tab-panel advocacy-panel" id="advocacy" aria-label="Advocacy">
+    <section class="tab-panel advocacy-panel" id="advocacy" role="tabpanel" aria-labelledby="tab-advocacy" tabindex="0" aria-label="Advocacy">
       <div class="content-shell">
         <div class="section-intro">
           <p class="eyebrow">Fisherfolk advocacy</p>
@@ -192,7 +205,7 @@
       </div>
     </section>
 
-    <section class="tab-panel assessment-panel" id="assessment" aria-label="Assessments and findings">
+    <section class="tab-panel assessment-panel" id="assessment" role="tabpanel" aria-labelledby="tab-assessment" tabindex="0" aria-label="Assessments and findings">
       <div class="content-shell">
         <div class="section-intro">
           <p class="eyebrow">Evidence and analysis</p>

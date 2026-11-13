@@ -14,9 +14,10 @@ An interactive web map showing coastal reclamation projects around Manila Bay. A
 ## Site tabs
 
 - **Projects** contains the interactive map and project list.
-- **Report Violations** is a front-end reporting form and safety guidance. It does not currently send or store reports; connect it to an approved, secure reporting service before collecting sensitive information.
+- **Report Violations** is a front-end reporting form and safety guidance. It can prepare an on-page preview but does not send or store reports; use an approved, secure reporting service before collecting sensitive information.
 - **Advocacy** presents Pangisda Pilipinas and Manila Bay para sa Tao advocacy information, photographs, and supplied reading/video links.
 - **Assessments & Findings** explains assessment topics and the current evidence status. It currently has no official assessment results; sample map features and unverified reports are not findings.
+- The project list can be searched by project name, status, or agency. Status filters and Reset update the list, map, and summary together.
 
 ## Project structure
 

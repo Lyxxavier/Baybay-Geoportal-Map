@@ -41,6 +41,8 @@
   var listEl = document.getElementById("project-list");
   var emptyEl = document.getElementById("empty");
   var noteEl = document.getElementById("data-note");
+  var searchEl = document.getElementById("project-search");
+  var resultSummaryEl = document.getElementById("result-summary");
 
   function esc(s) {
     return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
@@ -61,7 +63,13 @@
   }
 
   function visible() {
-    return features.filter(function (f) { return activeStatuses[f.properties.status]; });
+    var query = searchEl.value.trim().toLowerCase();
+    return features.filter(function (f) {
+      var p = f.properties || {};
+      var matchesStatus = activeStatuses[p.status];
+      var searchable = [p.name, p.status, p.agency].join(" ").toLowerCase();
+      return matchesStatus && (!query || searchable.indexOf(query) !== -1);
+    });
   }
 
   function render() {
@@ -86,6 +94,7 @@
     });
 
     emptyEl.hidden = shown.length > 0;
+    resultSummaryEl.textContent = "Showing " + shown.length + " of " + features.length + " projects";
     updateStats(shown);
   }
 
@@ -137,25 +146,78 @@
     });
   });
 
-  document.querySelectorAll(".tab-button").forEach(function (button) {
-    button.addEventListener("click", function () {
-      var target = button.getAttribute("data-tab");
-      document.querySelectorAll(".tab-button").forEach(function (btn) {
-        btn.classList.toggle("active", btn === button);
-      });
-      document.querySelectorAll(".tab-panel").forEach(function (panel) {
-        panel.classList.toggle("active", panel.id === target || panel.getAttribute("data-tab") === target);
-      });
+  searchEl.addEventListener("input", render);
+
+  document.getElementById("reset-filters").addEventListener("click", function () {
+    searchEl.value = "";
+    document.querySelectorAll(".filters input").forEach(function (input) {
+      input.checked = true;
+      activeStatuses[input.value] = true;
+    });
+    render();
+    searchEl.focus();
+  });
+
+  function activateTab(button) {
+    var target = button.getAttribute("data-tab");
+    document.querySelectorAll(".tab-button").forEach(function (tab) {
+      var selected = tab === button;
+      tab.classList.toggle("active", selected);
+      tab.setAttribute("aria-selected", selected ? "true" : "false");
+      tab.tabIndex = selected ? 0 : -1;
+    });
+    document.querySelectorAll(".tab-panel").forEach(function (panel) {
+      var active = panel.id === target || panel.getAttribute("data-tab") === target;
+      panel.classList.toggle("active", active);
+      panel.setAttribute("aria-hidden", active ? "false" : "true");
+    });
+    if (target === "projects") window.setTimeout(function () { map.invalidateSize(); }, 0);
+  }
+
+  var tabs = Array.prototype.slice.call(document.querySelectorAll(".tab-button"));
+  tabs.forEach(function (button) {
+    button.addEventListener("click", function () { activateTab(button); });
+    button.addEventListener("keydown", function (event) {
+      var index = tabs.indexOf(button);
+      var nextIndex = index;
+      if (event.key === "ArrowRight") nextIndex = (index + 1) % tabs.length;
+      else if (event.key === "ArrowLeft") nextIndex = (index - 1 + tabs.length) % tabs.length;
+      else if (event.key === "Home") nextIndex = 0;
+      else if (event.key === "End") nextIndex = tabs.length - 1;
+      else return;
+      event.preventDefault();
+      tabs[nextIndex].focus();
+      activateTab(tabs[nextIndex]);
     });
   });
 
   document.getElementById("reportForm").addEventListener("submit", function (event) {
     event.preventDefault();
-    var button = event.currentTarget.querySelector(".primary-button");
-    if (button) {
-      button.textContent = "Report submitted";
-      button.disabled = true;
-    }
+    var form = event.currentTarget;
+    if (!form.reportValidity()) return;
+
+    var preview = document.getElementById("reportPreview");
+    var values = new FormData(form);
+    var fields = [
+      ["Issue type", values.get("issueType")],
+      ["Location", values.get("location") || "Not provided"],
+      ["Incident details", values.get("details") || "Not provided"],
+      ["Evidence", values.get("evidence") || "Not provided"]
+    ];
+    var heading = document.createElement("h3");
+    heading.textContent = "Report preview — not submitted";
+    var list = document.createElement("dl");
+    fields.forEach(function (field) {
+      var term = document.createElement("dt");
+      var description = document.createElement("dd");
+      term.textContent = field[0];
+      description.textContent = field[1];
+      list.appendChild(term);
+      list.appendChild(description);
+    });
+    preview.replaceChildren(heading, list);
+    preview.hidden = false;
+    preview.scrollIntoView({ behavior: "smooth", block: "nearest" });
   });
 
   fetch(DATA_URL)
