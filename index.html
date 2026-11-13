@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Baybay Geoportal: Manila Bay Reclamation Projects</title>
+  <meta name="description" content="Browse coastal reclamation projects around Manila Bay on an interactive map.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100,600..800&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a class="skip" href="#map">Skip to map</a>
+
+  <header class="site-header">
+    <a class="brand" href="#top">Baybay Geoportal</a>
+    <nav aria-label="Main" class="tab-nav">
+      <button class="tab-button active" type="button" data-tab="projects">Projects</button>
+      <button class="tab-button" type="button" data-tab="reporting">Report Violations</button>
+      <button class="tab-button" type="button" data-tab="advocacy">Advocacy</button>
+      <button class="tab-button" type="button" data-tab="assessment">Assessments &amp; Findings</button>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="tab-panel active portal" id="projects" aria-label="Reclamation projects">
+      <aside class="panel">
+        <h1>Reclamation projects around Manila Bay</h1>
+        <p class="lead">See where land is being, or has been, reclaimed from the sea. Pick a project to zoom to it.</p>
+
+        <dl class="stats" id="stats" aria-live="polite">
+          <div><dt>Projects</dt><dd id="stat-count">–</dd></div>
+          <div><dt>Area (ha)</dt><dd id="stat-area">–</dd></div>
+          <div><dt>Completed</dt><dd id="stat-done">–</dd></div>
+        </dl>
+
+        <fieldset class="filters">
+          <legend>Show status</legend>
+          <label class="chip" data-status="Planned"><input type="checkbox" value="Planned" checked><span>Planned</span></label>
+          <label class="chip" data-status="Ongoing"><input type="checkbox" value="Ongoing" checked><span>Ongoing</span></label>
+          <label class="chip" data-status="Completed"><input type="checkbox" value="Completed" checked><span>Completed</span></label>
+        </fieldset>
+
+        <ul class="project-list" id="project-list"></ul>
+        <p class="empty" id="empty" hidden>No projects match these filters. Turn on a status above to see projects.</p>
+      </aside>
+
+      <div class="map-wrap">
+        <div id="map" role="application" aria-label="Map of Manila Bay reclamation projects"></div>
+        <p class="data-note" id="data-note" hidden></p>
+      </div>
+    </section>
+
+    <section class="tab-panel report-panel" id="reporting" aria-label="Report violations">
+      <div class="content-shell">
+        <div class="section-intro">
+          <p class="eyebrow">Citizen reporting</p>
+          <h2>Report violations to the Commission on Human Rights</h2>
+          <p>Use this form to flag environmental and human-rights concerns linked to reclamation, coastal destruction, displacement, or harassment in Manila Bay communities.</p>
+        </div>
+
+        <div class="report-grid">
+          <form class="report-form" id="reportForm">
+            <div class="field-row two-up">
+              <label>
+                <span>Reporter name</span>
+                <input type="text" name="reporter" placeholder="Full name or alias" />
+              </label>
+              <label>
+                <span>Contact</span>
+                <input type="text" name="contact" placeholder="Email or mobile number" />
+              </label>
+            </div>
+
+            <div class="field-row two-up">
+              <label>
+                <span>Location</span>
+                <input type="text" name="location" placeholder="Barangay / municipality / coastal area" />
+              </label>
+              <label>
+                <span>Issue type</span>
+                <select name="issueType">
+                  <option>Environmental damage</option>
+                  <option>Displacement or relocation</option>
+                  <option>Coastal encroachment</option>
+                  <option>Harassment or intimidation</option>
+                  <option>Other</option>
+                </select>
+              </label>
+            </div>
+
+            <label>
+              <span>What happened?</span>
+              <textarea name="details" rows="6" placeholder="Describe the incident, dates, affected community members, and any observed impacts."></textarea>
+            </label>
+
+            <label>
+              <span>Evidence and supporting details</span>
+              <textarea name="evidence" rows="4" placeholder="Attach reference links, photos, geotag info, or witness statements."></textarea>
+            </label>
+
+            <div class="actions">
+              <button type="submit" class="primary-button">Submit report</button>
+              <p class="form-note">This portal is for documentation and referral. Reports may be directed to the CHR complaint process and local authorities for action.</p>
+            </div>
+          </form>
+
+          <aside class="info-card">
+            <h3>CHR reporting channels</h3>
+            <ul>
+              <li>Coastal communities and fisherfolk reporting environmental harm and rights violations</li>
+              <li>Documentation of displacement, unlawful land use, and livelihood impacts</li>
+              <li>Referral support when evidence suggests state or corporate accountability issues</li>
+            </ul>
+            <div class="mini-callout">
+              <strong>Important:</strong>
+              <p>Do not put yourself or others in danger while documenting incidents. Prioritize safety, evidence preservation, and support from local organizations.</p>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section class="tab-panel advocacy-panel" id="advocacy" aria-label="Advocacy">
+      <div class="content-shell">
+        <div class="section-intro">
+          <p class="eyebrow">Fisherfolk advocacy</p>
+          <h2>Stand with coastal communities</h2>
+          <p>Pangisda Pilipinas is a national alliance of small-scale, artisanal, and subsistence fisherfolk organizations. The coalition opposes land reclamation and seabed quarrying, particularly in Manila Bay, Bulacan, Cavite, and Zambales.</p>
+        </div>
+
+        <div class="advocacy-grid">
+          <article class="advocacy-card highlight">
+            <h3>Pangisda Pilipinas’ position</h3>
+            <p>The alliance opposes reclamation and seabed quarrying projects across the Philippines. Its advocacy centers the concerns and livelihoods of small-scale fishing communities affected by coastal development.</p>
+          </article>
+
+          <article class="advocacy-card">
+            <h3>Key issues to explore</h3>
+            <ul>
+              <li>How Manila Bay reclamation affects fishing communities in Cavite and Bulacan</li>
+              <li>Legal challenges and Supreme Court rulings concerning coastal rehabilitation</li>
+              <li>Fisherfolk proposals for marine rehabilitation as an alternative to commercial development</li>
+            </ul>
+          </article>
+
+          <article class="advocacy-card">
+            <h3>Learn from community voices</h3>
+            <ul>
+              <li>Read reporting on Zambales fisherfolk joining protests against reclamation</li>
+              <li>Watch an interview with Benny Ng of Pangisda Bulacan about Manila Bay reclamation</li>
+              <li>See footage of fisherfolk protests in Manila Bay</li>
+            </ul>
+          </article>
+        </div>
+
+        <section class="advocacy-gallery" aria-labelledby="advocacy-gallery-title">
+          <h3 id="advocacy-gallery-title">Community voices in action</h3>
+          <div class="gallery-grid">
+            <figure>
+              <img src="images_pangisda/483525941_1097463205750891_2226409551872147317_n.jpg" alt="Fisherfolk and community members at a protest holding a banner calling for no reclamation and seabed quarrying">
+              <figcaption>Community members call for an end to reclamation and seabed quarrying.</figcaption>
+            </figure>
+            <figure>
+              <img src="images_pangisda/511131198_10163509932995168_6513476114418266549_n.jpg" alt="Fisherfolk on Manila Bay holding a sign that reads Manila Bay para sa Tao">
+              <figcaption>Fisherfolk bring the message “Manila Bay para sa Tao” onto the bay.</figcaption>
+            </figure>
+            <figure>
+              <img src="images_pangisda/511144462_10164225034336977_395314151377415808_n.jpg" alt="A flotilla of small fishing boats on Manila Bay near a large work barge">
+              <figcaption>Small fishing boats gather on Manila Bay during a fluvial protest.</figcaption>
+            </figure>
+          </div>
+        </section>
+
+        <section class="advocacy-sources" aria-labelledby="advocacy-sources-title">
+          <h3 id="advocacy-sources-title">Sources and further viewing</h3>
+          <ul>
+            <li><a href="https://newsinfo.inquirer.net/1736877/zambales-fisherfolk-join-protests-vs-reclamation" target="_blank" rel="noopener noreferrer">Inquirer: Zambales fisherfolk join protests vs. reclamation</a></li>
+            <li><a href="https://www.youtube.com/watch?v=w9ybEiN3aXg" target="_blank" rel="noopener noreferrer">YouTube video shared as an advocacy reference</a></li>
+            <li><a href="https://www.facebook.com/PANGISDAPilipinas/videos/panoodin-panayam-kay-benny-ng-pangisda-bulacan-ang-reklamasyon-sa-manila-bay-lal/699144832846766/" target="_blank" rel="noopener noreferrer">Pangisda Pilipinas: interview with Benny Ng of Pangisda Bulacan</a></li>
+            <li><a href="https://www.facebook.com/PANGISDAPilipinas/videos/fluvial-protest-in-manila-bayfishers-protest-in-manila-bay-near-the-new-airport-/2550612041975430/" target="_blank" rel="noopener noreferrer">Pangisda Pilipinas: fluvial protest in Manila Bay</a></li>
+          </ul>
+          <p>These links provide reporting and advocacy perspectives. The legal issues and alternative rehabilitation proposals listed above are topics for further research.</p>
+        </section>
+
+        <div class="callout-band">
+          <p>Let every decision be measured by how well it serves the people and sustains the waters they depend on.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="tab-panel assessment-panel" id="assessment" aria-label="Assessments and findings">
+      <div class="content-shell">
+        <div class="section-intro">
+          <p class="eyebrow">Evidence and analysis</p>
+          <h2>Assessments &amp; findings</h2>
+          <p>Review project information alongside environmental, community, and legal evidence. Findings should be traceable to reliable sources and clearly distinguish documented facts from concerns or interpretation.</p>
+        </div>
+
+        <div class="assessment-grid">
+          <article class="assessment-card assessment-status">
+            <p class="assessment-label">Current data status</p>
+            <h3>Project data are placeholders</h3>
+            <p>The map currently displays sample projects, not an official project dataset. Their boundaries, areas, statuses, and dates are not verified findings.</p>
+          </article>
+          <article class="assessment-card">
+            <p class="assessment-label">Assessment areas</p>
+            <h3>What to examine</h3>
+            <ul>
+              <li>Environmental impact assessments and monitoring records</li>
+              <li>Effects on fishing grounds, livelihoods, access, and coastal communities</li>
+              <li>Permits, consultation records, court decisions, and agency actions</li>
+            </ul>
+          </article>
+          <article class="assessment-card">
+            <p class="assessment-label">Findings</p>
+            <h3>No verified findings published yet</h3>
+            <p>Evidence and source materials have not yet been added for formal assessment here. Avoid treating advocacy claims, sample map features, or unverified reports as established facts.</p>
+          </article>
+        </div>
+
+        <div class="assessment-note">
+          <strong>For future updates</strong>
+          <p>Each assessment should identify its source, publication date, geographic scope, methodology, and limitations. Link supporting documents when they are available.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="about tab-panel active" id="about" data-tab="projects">
+      <div>
+        <h2>What the map shows</h2>
+        <p>Each polygon is the footprint of a reclamation project. Colour shows its current status: planned, ongoing or completed.</p>
+      </div>
+      <div>
+        <h2>About the data</h2>
+        <p>The projects shown are placeholders until the official dataset is loaded. Boundaries and figures are not for planning or legal use.</p>
+      </div>
+      <div>
+        <h2>Update the data</h2>
+        <p>Replace <code>data/reclamation-projects.sample.geojson</code> with your own file. Each feature needs <code>name</code>, <code>status</code>, <code>area_ha</code>, <code>agency</code> and <code>year</code>.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer" id="site-footer">
+    <p>Baybay Geoportal. Project data: built-in illustrative samples only; Philippine Reclamation Authority data is not loaded and its terms are unverified. Website code: <a href="LICENSE">MIT License</a>. Map tiles © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>.</p>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
+  <script src="map.js"></script>
+</body>
+</html>
