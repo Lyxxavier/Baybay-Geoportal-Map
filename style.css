@@ -30,6 +30,7 @@
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; scroll-padding-top: var(--header-h); }
 body {
+  display: flex; flex-direction: column; min-height: 100vh;
   margin: 0;
   font-family: var(--font-body);
   font-size: 1.0625rem;
@@ -86,12 +87,13 @@ button { touch-action: manipulation; }
   display: grid;
   grid-template-columns: minmax(320px, 400px) 1fr;
   height: calc(100vh - var(--header-h));
-  min-height: 560px;
+  min-height: 0;
 }
 .portal.tab-panel { display: none; }
 .portal.tab-panel.active { display: grid; }
 .panel {
   display: flex; flex-direction: column;
+  min-height: 0;
   padding: 1.5rem 1.25rem 1rem;
   background: var(--paper);
   border-right: 1px solid var(--line);
@@ -106,24 +108,24 @@ h1 {
   line-height: 1.15;
   text-wrap: balance;
 }
-.lead { margin: 0 0 1.1rem; color: var(--ink-soft); max-width: 38ch; }
+.lead { margin: 0 0 .75rem; color: var(--ink-soft); max-width: 38ch; }
 
-.stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: .5rem; margin: 0 0 1.1rem; }
-.stats div { padding: .55rem .7rem; background: var(--sea); border-radius: 4px; }
+.stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: .5rem; margin: 0 0 .75rem; }
+.stats div { padding: .4rem .55rem; background: var(--sea); border-radius: 4px; }
 .stats dt { font-size: .85rem; color: var(--ink-soft); }
 .stats dd { margin: 0; font-family: var(--font-display); font-weight: 700; font-size: 1.45rem; }
 
-.filters { display: flex; flex-wrap: wrap; gap: .5rem; margin: 0 0 .9rem; padding: 0; border: 0; }
+.filters { display: flex; flex-wrap: wrap; gap: .35rem; margin: 0 0 .6rem; padding: 0; border: 0; }
 .filters legend { padding: 0; margin-bottom: .5rem; font-weight: 700; }
 .filters .chip { position: relative; display: inline-flex; margin: 0; gap: 0; }
 .chip input { position: absolute; opacity: 0; inset: 0; cursor: pointer; }
 .chip span {
   display: inline-flex; align-items: center; gap: .5rem;
-  min-height: 2.5rem; padding: .4rem .75rem;
+  min-height: 2.3rem; padding: .32rem .6rem;
   border: 2px solid #718a93;
   border-radius: 999px;
   background: var(--paper); color: var(--ink);
-  font-weight: 700; line-height: 1.2;
+  font-size: .94rem; font-weight: 700; line-height: 1.2;
   cursor: pointer;
   transition: background-color .15s, border-color .15s, color .15s;
 }
@@ -160,7 +162,7 @@ h1 {
 }
 .project-list {
   list-style: none; margin: 0; padding: 0; overflow-y: auto; flex: 1;
-  border-top: 1px solid var(--line); overscroll-behavior: contain;
+  min-height: 0; border-top: 1px solid var(--line); overscroll-behavior: contain;
 }
 .project-list li { border-bottom: 1px solid var(--line); }
 .project-list button {
@@ -183,6 +185,8 @@ h1 {
 }
 .project-record .name { margin: 0 0 .2rem; font-size: 1.05rem; line-height: 1.3; }
 .project-record .meta { margin: 0 0 .65rem; }
+.record-details summary { color: #075985; font-size: .9rem; font-weight: 700; cursor: pointer; }
+.record-details[open] summary { margin-bottom: .45rem; }
 .record-detail { margin: .4rem 0; font-size: .95rem; line-height: 1.5; }
 .record-source { display: inline-block; margin-top: .45rem; color: #075985; font-weight: 700; text-underline-offset: .15em; }
 .record-source:hover { color: var(--ink); }
@@ -395,6 +399,8 @@ code { font-size: .92em; background: var(--paper); padding: .05em .3em; border-r
 
 .site-footer { padding: 1.25rem; background: var(--paper); border-top: 1px solid var(--line); color: var(--ink-soft); font-size: .92rem; }
 .site-footer p { margin: 0; max-width: 1100px; margin-inline: auto; }
+main { flex: 1 0 auto; }
+.site-footer { flex-shrink: 0; }
 
 /* Mobile: map first, panel below */
 @media (max-width: 800px) {
@@ -405,7 +411,7 @@ code { font-size: .92em; background: var(--paper); padding: .05em .3em; border-r
   .portal.tab-panel.active { display: flex; }
   .map-wrap { order: -1; height: 55vh; min-height: 260px; }
   .panel { border-right: 0; overflow: visible; }
-  .project-list { max-height: none; overflow: visible; flex: none; }
+  .project-list { min-height: 0; max-height: none; overflow: visible; flex: none; }
   .report-grid, .advocacy-grid, .about, .gallery-grid, .pra-comparison { grid-template-columns: 1fr; gap: 1.25rem; }
   .gallery-grid img { height: clamp(140px, 42vw, 210px); }
   .two-up { grid-template-columns: 1fr; }
