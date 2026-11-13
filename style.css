@@ -158,7 +158,10 @@ h1 {
   position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden;
   clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
 }
-.project-list { list-style: none; margin: 0; padding: 0; overflow-y: auto; flex: 1; border-top: 1px solid var(--line); overscroll-behavior: contain; }
+.project-list {
+  list-style: none; margin: 0; padding: 0; overflow-y: auto; flex: 1;
+  border-top: 1px solid var(--line); overscroll-behavior: contain;
+}
 .project-list li { border-bottom: 1px solid var(--line); }
 .project-list button {
   display: block; width: 100%; text-align: left;
