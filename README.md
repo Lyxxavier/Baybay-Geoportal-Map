@@ -27,7 +27,8 @@ Baybay-Geoportal-Map/
 ├── style.css           Site styling and responsive layouts
 ├── map.js              Map, filters, project list, statistics and tab switching
 ├── images_pangisda/    Advocacy photographs
-├── data/               GeoJSON project data (when supplied)
+├── data/
+│   └── reclamation-projects.template.geojson  Empty template for the official dataset
 └── README.md           This file
 ```
 
@@ -59,7 +60,9 @@ Every later push to the main branch redeploys automatically. GitHub Pages or any
 
 ## Updating the data
 
-The map reads `data/reclamation-projects.sample.geojson`. To use real data, place the GeoJSON at that path (or change `DATA_URL` at the top of `map.js` to point to another file).
+The map reads `data/reclamation-projects.geojson`. The repository includes an empty starter file at `data/reclamation-projects.template.geojson`; copy it to `data/reclamation-projects.geojson` when you are ready to add verified project records. If the official data file is absent, the map displays its clearly labeled built-in sample projects.
+
+A single GeoJSON file is sufficient for dozens of read-only projects; a database is unnecessary unless the data needs multi-user editing, frequent updates, access control, or change history. The search and status filters work across the full feature collection.
 
 ### Required format
 
@@ -69,6 +72,7 @@ The map reads `data/reclamation-projects.sample.geojson`. To use real data, plac
 
 | Property   | Type   | Description                                              | Example                  |
 |------------|--------|----------------------------------------------------------|--------------------------|
+| `project_id` | text | Optional stable project identifier                       | `"MB-001"`               |
 | `name`     | text   | Project name                                             | `"Pasay Offshore Area"`  |
 | `status`   | text   | Must be exactly `Planned`, `Ongoing` or `Completed`      | `"Ongoing"`              |
 | `area_ha`  | number | Project area in hectares                                 | `65.0`                   |
@@ -81,6 +85,7 @@ Example feature:
 {
   "type": "Feature",
   "properties": {
+    "project_id": "EXAMPLE-001",
     "name": "Example Reclamation Area",
     "status": "Planned",
     "area_ha": 30.0,
@@ -95,6 +100,7 @@ Example feature:
 ```
 
 The first and last coordinate of every polygon ring must be the same point.
+For each project, use a `Polygon` or `MultiPolygon` geometry and include only verified project boundaries. Do not copy placeholder coordinates as official data.
 
 ### Exporting from QGIS
 
@@ -117,7 +123,7 @@ The first and last coordinate of every polygon ring must be the same point.
 
 ## Data source and licensing
 
-The map currently uses built-in illustrative samples only. See [`DATA_NOTICE.md`](./DATA_NOTICE.md) for the status of the intended source, dataset, acquisition date, and dataset terms. Do not present the official dataset as MIT-licensed unless its own terms explicitly allow that.
+The map currently uses built-in illustrative samples only. See [`DATA_NOTICE.md`](./DATA_NOTICE.md) for the status of the intended source, dataset, acquisition date, and dataset terms. Record the exact dataset name, retrieval date, and license or permission terms there before adding official data to a public deployment. Do not present the official dataset as MIT-licensed unless its own terms explicitly allow that.
 
 | Item                         | Details                         |
 |------------------------------|---------------------------------|

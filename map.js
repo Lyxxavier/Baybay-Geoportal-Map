@@ -1,7 +1,7 @@
 (function () {
   "use strict";
 
-  var DATA_URL = "data/reclamation-projects.sample.geojson";
+  var DATA_URL = "data/reclamation-projects.geojson";
   var CENTER = [14.56, 120.95]; // Manila Bay
   var COLORS = { Planned: "#4d78a8", Ongoing: "#d38a00", Completed: "#2e7d5b" };
 
