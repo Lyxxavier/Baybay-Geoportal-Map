@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Baybay Geoportal: Manila Bay Reclamation Projects</title>
-  <meta name="description" content="Browse coastal reclamation projects around Manila Bay on an interactive map.">
+  <meta name="description" content="Explore reclamation project information across Manila Bay, with source-linked PRA project records.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -33,12 +33,12 @@
 
         <dl class="stats" id="stats" aria-live="polite">
           <div><dt>Projects</dt><dd id="stat-count">–</dd></div>
-          <div><dt>Area (ha)</dt><dd id="stat-area">–</dd></div>
-          <div><dt>Completed</dt><dd id="stat-done">–</dd></div>
+          <div><dt>PRA-reported area (ha)</dt><dd id="stat-area">–</dd></div>
+          <div><dt>Verified PRA boundaries</dt><dd id="stat-done">–</dd></div>
         </dl>
 
         <fieldset class="filters">
-          <legend>Show status</legend>
+          <legend>Show project status</legend>
           <label class="chip" data-status="Planned"><input type="checkbox" value="Planned" checked><span>Planned</span></label>
           <label class="chip" data-status="Ongoing"><input type="checkbox" value="Ongoing" checked><span>Ongoing</span></label>
           <label class="chip" data-status="Completed"><input type="checkbox" value="Completed" checked><span>Completed</span></label>
@@ -46,18 +46,18 @@
 
         <div class="project-tools">
           <label class="search-field" for="project-search">
-            <span class="sr-only">Search projects by name, status, or agency</span>
+            <span class="sr-only">Search projects by name, status, or proponent</span>
             <input id="project-search" type="search" placeholder="Search projects" autocomplete="off">
           </label>
           <button class="reset-button" id="reset-filters" type="button">Reset</button>
         </div>
         <p class="result-summary" id="result-summary" aria-live="polite"></p>
         <ul class="project-list" id="project-list"></ul>
-        <p class="empty" id="empty" hidden>No projects match your search and status filters. Clear the search or reset the filters to see projects.</p>
+        <p class="empty" id="empty" hidden>No projects match your search and stage filters. Clear the search or reset the filters to see projects.</p>
       </aside>
 
       <div class="map-wrap">
-        <div id="map" role="application" aria-label="Map of Manila Bay reclamation projects"></div>
+        <div id="map" role="application" aria-label="Map of Manila Bay with clearly marked illustrative placeholder shapes"></div>
         <p class="data-note" id="data-note" hidden></p>
       </div>
     </section>
@@ -210,34 +210,40 @@
         <div class="section-intro">
           <p class="eyebrow">Evidence and analysis</p>
           <h2>Assessments &amp; findings</h2>
-          <p>Review project information alongside environmental, community, and legal evidence. Findings should be traceable to reliable sources and clearly distinguish documented facts from concerns or interpretation.</p>
+          <p>A side-by-side summary of two Pasay examples from the Philippine Reclamation Authority (PRA) project pages. They are part of the wider Manila Bay context, not a complete bay-wide project inventory or an independent environmental, legal, or community-impact assessment.</p>
         </div>
 
-        <div class="assessment-grid">
-          <article class="assessment-card assessment-status">
-            <p class="assessment-label">Current data status</p>
-            <h3>Project data are placeholders</h3>
-            <p>The map currently displays sample projects, not an official project dataset. Their boundaries, areas, statuses, and dates are not verified findings.</p>
+        <div class="pra-comparison">
+          <article class="pra-project-card">
+            <p class="assessment-label">PRA project page · 360 hectares</p>
+            <h3>Pasay Reclamation and Development Project</h3>
+            <p class="pra-location">Central Business Park-I Island A / MOA Complex, Financial Center Area, and Cultural Center of the Philippines area</p>
+            <dl class="pra-facts">
+              <div><dt>Proponents</dt><dd>Pasay City Government, in a joint venture with SM Prime Holdings Inc.</dd></div>
+              <div><dt>Proposed uses</dt><dd>Mixed-use commercial, residential, institutional, and tourism estates.</dd></div>
+              <div><dt>Land shares stated by PRA</dt><dd>PRA: 138.60 ha total share (45.60 ha net saleable; 93 ha roads and open spaces). Pasay City: 30.24 ha net saleable.</dd></div>
+              <div><dt>Progress reported as of 31 Dec 2025</dt><dd>PRA reports 360 ha reclaimed above 1.5 m MLLW, ready for horizontal construction such as roads and bridges. This does not mean all development is complete.</dd></div>
+            </dl>
+            <a class="pra-source" href="https://www.pea.gov.ph/360-hectare-pasay-reclamation-and-development-project/" target="_blank" rel="noopener noreferrer">Read the official PRA project page<span class="sr-only"> (opens in a new tab)</span></a>
           </article>
-          <article class="assessment-card">
-            <p class="assessment-label">Assessment areas</p>
-            <h3>What to examine</h3>
-            <ul>
-              <li>Environmental impact assessments and monitoring records</li>
-              <li>Effects on fishing grounds, livelihoods, access, and coastal communities</li>
-              <li>Permits, consultation records, court decisions, and agency actions</li>
-            </ul>
-          </article>
-          <article class="assessment-card">
-            <p class="assessment-label">Findings</p>
-            <h3>No verified findings published yet</h3>
-            <p>Evidence and source materials have not yet been added for formal assessment here. Avoid treating advocacy claims, sample map features, or unverified reports as established facts.</p>
+
+          <article class="pra-project-card">
+            <p class="assessment-label">PRA project page · 265 hectares</p>
+            <h3>Pasay Harbor City Reclamation Project</h3>
+            <p class="pra-location">Foreshore and offshore areas of Pasay City</p>
+            <dl class="pra-facts">
+              <div><dt>Proponents</dt><dd>Pasay City Government, in a joint venture with Pasay Harbor City Corporation.</dd></div>
+              <div><dt>Proposed uses</dt><dd>Mixed residential and commercial development, tourism, and theme parks.</dd></div>
+              <div><dt>Land shares stated by PRA</dt><dd>PRA: 33.39 ha net saleable. Pasay City: 22.26 ha net saleable. 79.50 ha allocated for roads and open spaces.</dd></div>
+              <div><dt>Progress reported as of 31 Dec 2025</dt><dd>PRA reports 129.23 ha of Island A remained below water level. Reclamation resumed after a suspension was lifted in November 2025; activity was expected to continue through 2026, with total completion expected by August 2028.</dd></div>
+            </dl>
+            <a class="pra-source" href="https://www.pea.gov.ph/265-hectare-pasay-harbor-city-reclamation-project/" target="_blank" rel="noopener noreferrer">Read the official PRA project page<span class="sr-only"> (opens in a new tab)</span></a>
           </article>
         </div>
 
         <div class="assessment-note">
-          <strong>For future updates</strong>
-          <p>Each assessment should identify its source, publication date, geographic scope, methodology, and limitations. Link supporting documents when they are available.</p>
+          <strong>Source and limitations</strong>
+          <p>Source pages reviewed 14 November 2026; progress figures above are reported by PRA as of 31 December 2025. Project areas and allocations are reproduced as agency-reported figures, not independently checked. The comparison does not establish environmental effects, legal compliance, community consent, or impacts on fishing livelihoods. These two Pasay examples are not a complete Manila Bay inventory. The dashed map shapes are illustrative placeholders; PRA project boundaries are not available. See <a href="DATA_NOTICE.md">DATA_NOTICE.md</a> for data-use status.</p>
         </div>
       </div>
     </section>
@@ -245,11 +251,11 @@
     <section class="about tab-panel active" id="about" data-tab="projects">
       <div>
         <h2>What the map shows</h2>
-        <p>Each polygon is the footprint of a reclamation project. Colour shows its current status: planned, ongoing or completed.</p>
+        <p>The dashed shapes are illustrative placeholders and do not represent actual projects or boundaries. The two PRA records have no verified boundaries to plot.</p>
       </div>
       <div>
         <h2>About the data</h2>
-        <p>The projects shown are placeholders until the official dataset is loaded. Boundaries and figures are not for planning or legal use.</p>
+        <p>The list contains two Pasay examples from PRA pages and three illustrative placeholders; it is not a complete Manila Bay inventory. Placeholder shapes are not real project boundaries.</p>
       </div>
       <div>
         <h2>Update the data</h2>
@@ -259,7 +265,7 @@
   </main>
 
   <footer class="site-footer" id="site-footer">
-    <p>Baybay Geoportal. Project data: built-in illustrative samples only; Philippine Reclamation Authority data is not loaded and its terms are unverified. Website code: <a href="LICENSE">MIT License</a>. Map tiles © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>.</p>
+    <p>Baybay Geoportal. Two project records summarize PRA pages; dashed map shapes are illustrative placeholders, not actual boundaries. PRA data terms are unverified; see <a href="DATA_NOTICE.md">data notice</a>. Website code: <a href="LICENSE">MIT License</a>. Map tiles © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>.</p>
   </footer>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>

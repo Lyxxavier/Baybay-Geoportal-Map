@@ -172,6 +172,20 @@ h1 {
 .project-list button:hover, .project-list button[aria-current="true"] { background: var(--sea); }
 .project-list .name { display: block; font-weight: 600; }
 .project-list .meta { display: block; font-size: .92rem; color: var(--ink-soft); }
+.project-list .placeholder-tag {
+  display: inline-block; margin-top: .35rem; padding: .12rem .45rem;
+  border: 1px dashed #718a93; border-radius: 999px;
+  color: #304a58; font-size: .82rem; font-weight: 700;
+}
+.project-record {
+  padding: .8rem .75rem .9rem .9rem; border-left: 5px solid var(--c, var(--line));
+  background: var(--paper);
+}
+.project-record .name { margin: 0 0 .2rem; font-size: 1.05rem; line-height: 1.3; }
+.project-record .meta { margin: 0 0 .65rem; }
+.record-detail { margin: .4rem 0; font-size: .95rem; line-height: 1.5; }
+.record-source { display: inline-block; margin-top: .45rem; color: #075985; font-weight: 700; text-underline-offset: .15em; }
+.record-source:hover { color: var(--ink); }
 .empty { color: var(--ink-soft); padding: 1rem .25rem; }
 .project-list button:focus-visible { outline-offset: -3px; }
 
@@ -186,9 +200,14 @@ h1 {
   border: 1px solid var(--line); border-radius: 4px;
   font-size: .92rem;
 }
-.leaflet-popup-content { font-family: var(--font-body); }
-.popup h3 { margin: 0 0 .25rem; font-family: var(--font-display); font-size: 1.05rem; }
-.popup p { margin: 0; }
+.leaflet-popup-content {
+  max-width: 216px; margin: 10px 12px;
+  font-family: var(--font-body); font-size: .88rem; line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+.leaflet-popup-content-wrapper { border-radius: 10px; }
+.popup h3 { margin: 0 0 .25rem; font-family: var(--font-display); font-size: 1rem; line-height: 1.25; }
+.popup p { margin: 0 0 .25rem; }
 
 /* About */
 .report-panel, .advocacy-panel {
@@ -322,29 +341,41 @@ textarea { resize: vertical; min-height: 110px; }
 }
 .callout-band p { margin: 0; }
 
-.assessment-grid {
-  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.25rem;
+.pra-comparison {
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.25rem;
   align-items: stretch;
 }
-.assessment-card {
-  padding: 1.35rem; border: 1px solid #bfd0d5; border-radius: 16px;
-  background: #fff; box-shadow: 0 10px 24px rgba(16, 43, 52, .07); color: #102b34;
+.pra-project-card {
+  display: flex; flex-direction: column; min-width: 0; padding: 1.35rem;
+  border: 1px solid #bfd0d5; border-radius: 16px; background: #fff;
+  box-shadow: 0 10px 24px rgba(16, 43, 52, .07); color: #102b34;
 }
-.assessment-card h3 {
-  margin: 0 0 .65rem; font-family: var(--font-display); font-size: 1.3rem; line-height: 1.25;
+.pra-project-card h3 {
+  margin: 0 0 .45rem; font-family: var(--font-display); font-size: 1.4rem; line-height: 1.25;
 }
-.assessment-card p { margin: 0; color: #304a58; line-height: 1.65; }
-.assessment-card ul { margin: 0; padding-left: 1.2rem; color: #304a58; line-height: 1.7; }
+.pra-location { margin: 0 0 1rem; color: #395a67; line-height: 1.5; }
+.pra-facts { margin: 0; }
+.pra-facts > div {
+  display: grid; grid-template-columns: minmax(8.5rem, .7fr) minmax(0, 1.5fr);
+  gap: .3rem .85rem; padding: .8rem 0; border-top: 1px solid #dce6e9;
+}
+.pra-facts dt { color: #163340; font-weight: 800; }
+.pra-facts dd { margin: 0; color: #304a58; line-height: 1.55; }
+.pra-source {
+  align-self: flex-start; margin-top: auto; padding-top: 1rem;
+  color: #075985; font-weight: 700; line-height: 1.5; text-underline-offset: .15em;
+}
+.pra-source:hover { color: #0f2a35; }
 .assessment-label {
   margin-bottom: .55rem !important; color: #315f70 !important; font-size: .78rem;
   font-weight: 800; letter-spacing: .09em; text-transform: uppercase;
 }
-.assessment-status { border-top: 5px solid #875000; }
 .assessment-note {
   margin-top: 1.25rem; padding: 1.1rem 1.25rem; border-left: 5px solid #23628a;
   border-radius: 10px; background: #e7f1f8; color: #102b34;
 }
 .assessment-note p { margin: .35rem 0 0; color: #304a58; line-height: 1.6; }
+.assessment-note a { color: #075985; font-weight: 700; text-underline-offset: .15em; }
 
 .about {
   display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.25rem;
@@ -368,11 +399,14 @@ code { font-size: .92em; background: var(--paper); padding: .05em .3em; border-r
 /* Mobile: map first, panel below */
 @media (max-width: 800px) {
   :root { --header-h: 104px; }
-  .portal { grid-template-columns: 1fr; grid-template-rows: 55vh auto; height: auto; }
-  .map-wrap { order: -1; min-height: 55vh; }
+  .portal {
+    display: flex; flex-direction: column; height: auto; min-height: 0;
+  }
+  .portal.tab-panel.active { display: flex; }
+  .map-wrap { order: -1; height: 55vh; min-height: 260px; }
   .panel { border-right: 0; overflow: visible; }
-  .project-list { max-height: 320px; }
-  .report-grid, .advocacy-grid, .about, .gallery-grid, .assessment-grid { grid-template-columns: 1fr; gap: 1.25rem; }
+  .project-list { max-height: none; overflow: visible; flex: none; }
+  .report-grid, .advocacy-grid, .about, .gallery-grid, .pra-comparison { grid-template-columns: 1fr; gap: 1.25rem; }
   .gallery-grid img { height: clamp(140px, 42vw, 210px); }
   .two-up { grid-template-columns: 1fr; }
   .site-header nav { gap: .3rem; }
@@ -388,9 +422,11 @@ code { font-size: .92em; background: var(--paper); padding: .05em .3em; border-r
   .content-shell { padding: 1.5rem 1rem 2rem; }
   .section-intro { margin-bottom: 1.15rem; }
   .section-intro p { font-size: 1.05rem; }
-  .report-form, .info-card, .advocacy-card, .assessment-card { padding: 1rem; }
+  .report-form, .info-card, .advocacy-card { padding: 1rem; }
   .report-preview dl { grid-template-columns: 1fr; gap: .1rem; }
   .report-preview dd { margin-bottom: .55rem; }
+  .pra-project-card { padding: 1rem; }
+  .pra-facts > div { grid-template-columns: 1fr; gap: .25rem; }
   .data-note { max-width: calc(100% - 1.5rem); bottom: .75rem; font-size: .82rem; }
   .tab-nav { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); overflow: visible; }
   .tab-button { flex: initial; width: 100%; min-width: 0; min-height: 2.45rem; white-space: normal; line-height: 1.15; }

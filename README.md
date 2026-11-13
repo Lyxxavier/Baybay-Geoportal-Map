@@ -2,22 +2,21 @@
 
 An interactive web map showing coastal reclamation projects around Manila Bay. Anyone can open it in a browser to see where projects are, what stage they are at, and how large they are. No login or install is needed.
 
-> **Status:** The map currently shows placeholder projects. The boundaries and figures are not official and must not be used for planning, legal or engineering purposes until the real dataset is loaded.
+> **Status:** The Projects list contains two Pasay examples from Philippine Reclamation Authority (PRA) pages and three clearly labeled illustrative placeholders. It is not a complete Manila Bay inventory; placeholder shapes are not real project boundaries.
 
 ## What you can do on the map
 
-- See every project as a coloured area on the bay.
-- Filter by status: **Planned**, **Ongoing** or **Completed**.
-- Select a project in the list, or click it on the map, to zoom in and read its details: name, status, year, area in hectares, and responsible agency.
-- Read the summary counts (projects, total hectares, completed) for whatever is currently shown.
+- Review two Pasay examples using PRA-published details and direct source links; the project list is not yet a complete Manila Bay inventory.
+- Filter by **Planned**, **Ongoing**, or **Completed**; search by project name, status, or proponent.
+- See the total PRA-reported area and count of verified PRA boundaries; illustrative placeholder areas are excluded from the total.
 
 ## Site tabs
 
-- **Projects** contains the interactive map and project list.
+- **Projects** contains the Manila Bay map and currently available project records. The two Pasay records are examples, not a complete regional inventory.
 - **Report Violations** is a front-end reporting form and safety guidance. It can prepare an on-page preview but does not send or store reports; use an approved, secure reporting service before collecting sensitive information.
 - **Advocacy** presents Pangisda Pilipinas and Manila Bay para sa Tao advocacy information, photographs, and supplied reading/video links.
-- **Assessments & Findings** explains assessment topics and the current evidence status. It currently has no official assessment results; sample map features and unverified reports are not findings.
-- The project list can be searched by project name, status, or agency. Status filters and Reset update the list, map, and summary together.
+- **Assessments & Findings** compares PRA-reported details for the 360-Hectare Pasay Reclamation and Development Project and the 265-Hectare Pasay Harbor City Reclamation Project. The comparison links to the source pages, dates progress statements to 31 December 2025, and is not an independent impact assessment.
+- The project list can be searched by project name, status, or proponent. Status filters and Reset update the list and summary.
 
 ## Project structure
 
@@ -43,7 +42,7 @@ cd Baybay-Geoportal-Map
 python -m http.server 8000
 ```
 
-Then open <http://localhost:8000>. If you open `index.html` directly instead, the map still works but shows three built-in sample projects and a note explaining why.
+Then open <http://localhost:8000>. If you open `index.html` directly instead, the map shows two built-in PRA records and three clearly labeled illustrative placeholder shapes.
 
 ## Publish it (Vercel)
 
@@ -60,13 +59,13 @@ Every later push to the main branch redeploys automatically. GitHub Pages or any
 
 ## Updating the data
 
-The map reads `data/reclamation-projects.geojson`. The repository includes an empty starter file at `data/reclamation-projects.template.geojson`; copy it to `data/reclamation-projects.geojson` when you are ready to add verified project records. If the official data file is absent, the map displays its clearly labeled built-in sample projects.
+The map optionally reads `data/reclamation-projects.geojson`. The repository includes an empty starter file at `data/reclamation-projects.template.geojson`; use it to create a GeoJSON file when verified project records and boundaries are available. When the optional file is absent or cannot be loaded, the map displays two built-in, source-attributed PRA records and three clearly labeled illustrative placeholder shapes. Placeholder shapes are for demonstrating the interface only and must not be interpreted as real project locations.
 
 A single GeoJSON file is sufficient for dozens of read-only projects; a database is unnecessary unless the data needs multi-user editing, frequent updates, access control, or change history. The search and status filters work across the full feature collection.
 
 ### Required format
 
-- File type: **GeoJSON**, a `FeatureCollection` of `Polygon` or `MultiPolygon` features.
+- File type: **GeoJSON**, a `FeatureCollection` of `Polygon` or `MultiPolygon` features when verified boundaries are available. A feature may have `geometry: null` if it is an unlocated source record; the site lists it but does not draw it.
 - Coordinate system: **WGS 84 (EPSG:4326)**, longitude first, then latitude.
 - One feature per project, with these properties:
 
@@ -74,8 +73,8 @@ A single GeoJSON file is sufficient for dozens of read-only projects; a database
 |------------|--------|----------------------------------------------------------|--------------------------|
 | `project_id` | text | Optional stable project identifier                       | `"MB-001"`               |
 | `name`     | text   | Project name                                             | `"Pasay Offshore Area"`  |
-| `status`   | text   | Must be exactly `Planned`, `Ongoing` or `Completed`      | `"Ongoing"`              |
-| `area_ha`  | number | Project area in hectares                                 | `65.0`                   |
+| `status`   | text   | Must be `Planned`, `Ongoing`, or `Completed`               | `"Ongoing"`              |
+| `area_ha`  | number | Reported project area in hectares; not necessarily reclaimed area | `65.0`       |
 | `agency`   | text   | Responsible agency or proponent                          | `"Agency name"`          |
 | `year`     | number | Year of approval, start or completion (pick one and keep it consistent) | `2024`     |
 
@@ -100,7 +99,7 @@ Example feature:
 ```
 
 The first and last coordinate of every polygon ring must be the same point.
-For each project, use a `Polygon` or `MultiPolygon` geometry and include only verified project boundaries. Do not copy placeholder coordinates as official data.
+For each project, include a `Polygon` or `MultiPolygon` only when the boundary is verified; do not make approximate shapes from project area figures or place the project at a guessed map coordinate. Cite and date all non-spatial records, and distinguish reported project area from area reclaimed or remaining.
 
 ### Exporting from QGIS
 
@@ -123,7 +122,7 @@ For each project, use a `Polygon` or `MultiPolygon` geometry and include only ve
 
 ## Data source and licensing
 
-The map currently uses built-in illustrative samples only. See [`DATA_NOTICE.md`](./DATA_NOTICE.md) for the status of the intended source, dataset, acquisition date, and dataset terms. Record the exact dataset name, retrieval date, and license or permission terms there before adding official data to a public deployment. Do not present the official dataset as MIT-licensed unless its own terms explicitly allow that.
+The map uses two built-in, source-attributed PRA project summaries and three illustrative placeholders; these are not an official dataset or geometry. The PRA information is also compared in Assessments & Findings. See [`DATA_NOTICE.md`](./DATA_NOTICE.md) for the status of the official dataset, acquisition date, and dataset terms. Record the exact dataset name, retrieval date, and license or permission terms there before adding official data to a public deployment. Do not present the official dataset as MIT-licensed unless its own terms explicitly allow that.
 
 | Item                         | Details                         |
 |------------------------------|---------------------------------|
@@ -132,6 +131,7 @@ The map currently uses built-in illustrative samples only. See [`DATA_NOTICE.md`
 | Dataset name and version     | No official dataset obtained or loaded |
 | Date obtained / last update  | Not obtained |
 | Data licence / terms of use  | Not supplied or verified; no reuse permission asserted |
+| Official pages referenced   | PRA project pages for the 360-ha Pasay project and 265-ha Pasay Harbor City project; see Assessments & Findings |
 | Contact for corrections      | _to be added_                   |
 
 Background map © [OpenStreetMap contributors](https://www.openstreetmap.org/copyright), available under the ODbL.
